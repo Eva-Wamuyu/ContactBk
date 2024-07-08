@@ -6,22 +6,36 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## Running Locally
+```
+# Clone the project
+git clone https://github.com/Eva-Wamuyu/ContactBk
+or
+git clone git@github.com:Eva-Wamuyu/ContactBk.git
+or using other means like GH desktop
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+# Navigate to the ng folder
+cd ContactBk
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# Install dependencies
 
-## Running unit tests
+npm install
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Run the server
 
-## Running end-to-end tests
+ng serve
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Components
 
-## Further help
+There are 3 components
+* app - The entry point which initialize the application
+* contact-list - List of contacts
+* modal - Contains form and details of one contact
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## Dependencies
+In addition to the 'common' dependencies:
+* TailwindCSS - Styling, responsiveness using utility classes
+
+
