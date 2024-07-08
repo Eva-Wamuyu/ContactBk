@@ -38,4 +38,7 @@ There are 3 components
 In addition to the 'common' dependencies:
 * TailwindCSS - Styling, responsiveness using utility classes
 
+###
+
+Dummy json generated using [mackaroo](https://www.mockaroo.com/)
 
