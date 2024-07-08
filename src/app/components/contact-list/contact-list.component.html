@@ -1,0 +1,112 @@
+<div class="bg-blue-50 min-h-screen flex flex-col">
+
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm sticky top-0 w-full">
+    <div class="container mx-auto p-4 flex flex-col sm:flex-row justify-between items-center">
+      <h1 class="text-xl font-bold mb-2 sm:mb-0">Contact Book</h1>
+      <div class="flex items-center space-x-2">
+
+
+        <div class="relative">
+          <input type="text" [(ngModel)]="searchTerm" placeholder="Search..." class="pl-8 pr-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 w-full sm:w-auto"
+          (input)="filterContacts()">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center">
+            <i class="fa fa-search text-gray-400"></i>
+          </div>
+        </div>
+
+
+        <button (click)="toggleViewMode('list')" [ngClass]="{'font-bold bg-blue-200': viewMode === 'list'}" class="px-4 py-2 rounded hover:bg-gray-200 focus:outline-none" title="List View">
+          <i class="fa fa-list" aria-hidden="true"></i>
+        </button>
+        <button (click)="toggleViewMode('grid')" [ngClass]="{'font-bold bg-blue-200': viewMode === 'grid'}" class="px-4 py-2 rounded hover:bg-gray-200 focus:outline-none" title="Grid View">
+          <i class="fa fa-th" aria-hidden="true"></i>
+        </button>
+
+        <button (click)="openAddModal()" class="text-blue-500 px-4 py-2 rounded hover:bg-gray-200"
+         title="Add Contact">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+
+        <button *ngIf="selectedContacts.length > 0" (click)="deleteSelectedContacts()"
+          class="text-red-600 px-4 py-2 rounded hover:bg-gray-200 focus:outline-none" title="Delete Selected">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+
+      </div>
+    </div>
+  </nav>
+
+
+
+  <!-- Content -->
+
+  <div *ngIf="contacts.length" class="container mx-auto p-4">
+    <!-- Select All Checkbox -->
+    <div class="mb-4 ms-4" *ngIf="contacts.length > 0">
+      <input id="selectAll" type="checkbox" (change)="toggleSelectAll($event)" class="" [checked]="isAllSelected">
+      <label for="selectAll" class="cursor-pointer ms-3">Select All</label>
+    </div>
+
+    <button (click)="toggleSortOrder()"
+        class="px-4 py-2 focus:outline-none"
+        [title]="'Sort ' + (sortOrder === 'asc' ? 'Descending' : 'Ascending')">
+      <i class="fa fa-sort{{ sortOrder === 'asc' ? '-asc' : '-desc' }}" aria-hidden="true"></i> Name
+    </button>
+
+
+
+      <div *ngIf="viewMode === 'list'" class="list-view">
+        <ul>
+          <li *ngFor="let contact of contacts"
+              (click)="viewContactDetails(contact)"
+              class="mb-2 cursor-pointer hover:bg-gray-100 p-3 flex items-center border-b rounded-md rounded-b-none border-slate-400 hover:shadow-md"
+              [ngClass]="{'bg-blue-200 rounded-b-md': isSelected(contact)}">
+            <input type="checkbox" [checked]="isSelected(contact)" (click)="$event.stopPropagation(); toggleContactSelection(contact)" class="mr-2">
+            <span>{{ contact.firstName }} {{ contact.lastName }} - {{ contact.phoneNumber }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="viewMode === 'grid'" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <ng-container *ngFor="let contact of contacts">
+          <div class="border p-4 rounded-lg hover:shadow-lg flex items-center justify-between cursor-pointer border-slate-400 hover:bg-gray-100"
+               (click)="viewContactDetails(contact)"
+               [class.bg-blue-200]="isSelected(contact)">
+            <input type="checkbox" [checked]="isSelected(contact)" (click)="$event.stopPropagation(); toggleContactSelection(contact)" class="mr-2">
+            <div class="flex-1">
+              <p class="text-lg font-bold">{{ contact.firstName }} {{ contact.lastName }}</p>
+              <p>{{ contact.phoneNumber }}</p>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+  </div>
+
+
+  <div *ngIf="contacts.length === 0 && !searchTerm" class="text-gray-600 text-lg text-center mt-32">No contacts at the moment.</div>
+  <div *ngIf="contacts.length === 0 && searchTerm" class="text-gray-600 text-lg text-center mt-32">No results found.</div>
+
+
+
+  <app-modal *ngIf="showEditModal"
+    [contact]="selectedContact"
+    [modalAction]="modalAction"
+    (save)="saveContact($event)"
+    (close)="closeEditModal()"
+    (delete)="deleteContact(selectedContact)">
+  </app-modal>
+
+
+
+  <div *ngIf="showUndoNotification" class="fixed bottom-4 left-96 flex justify-center items-center bottom-pop">
+    <div class="bg-blue-500 text-white rounded-lg shadow-lg p-4 max-w-screen-lg w-full">
+      <div class="flex items-center justify-between">
+        <span class="mr-4">Contact(s) deleted.</span>
+        <button (click)="undoDelete()" class="bg-white text-blue-500 px-4 py-2 rounded">Undo</button>
+      </div>
+    </div>
+  </div>
+</div>

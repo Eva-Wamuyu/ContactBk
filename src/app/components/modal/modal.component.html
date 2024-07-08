@@ -1,0 +1,110 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="bg-white rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/3">
+    <div class="flex justify-between items-center p-4 border-b">
+      <h4 class="text-xl font-semibold">
+        <i class="fa" [ngClass]="{
+          'fa-user': modalAction === 'VIEW',
+          'fa-pencil': modalAction === 'EDIT',
+          'fa-plus': modalAction === 'ADD'
+        }"></i>
+        {{ modalTitle }}
+      </h4>
+      <button type="button" class="text-gray-500 hover:text-gray-800" (click)="closeModal()" aria-label="Close">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+    <div class="p-4">
+      <form *ngIf="modalAction === 'EDIT' || modalAction === 'ADD'" (ngSubmit)="saveContact(contactForm)" #contactForm="ngForm">
+        <div class="mb-4">
+          <label for="firstName" class="block text-gray-700">First Name <span class="text-red-500">*</span></label>
+          <input
+            id="firstName"
+            type="text"
+            class="form-input w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            [(ngModel)]="tempContact.firstName"
+            name="firstName"
+            #firstName="ngModel"
+            required>
+          <div *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-sm mt-1">
+            First Name is required.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="lastName" class="block text-gray-700">Last Name</label>
+          <input
+            id="lastName"
+            type="text"
+            class="form-input w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            [(ngModel)]="tempContact.lastName"
+            name="lastName"
+            #lastName="ngModel"
+            >
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700">Email</label>
+          <input
+            id="email"
+            type="email"
+            class="form-input w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            [(ngModel)]="tempContact.email"
+            name="email"
+            #email="ngModel"
+            email>
+          <div *ngIf="email.invalid && email.touched" class="text-red-500 text-sm mt-1">
+            Please enter a valid email.
+          </div>
+        </div>
+        <div class="mb-4">
+          <label for="phoneNumber" class="block text-gray-700">Phone Number <span class="text-red-500">*</span></label>
+          <input
+            id="phoneNumber"
+            type="tel"
+            class="form-input w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            [(ngModel)]="tempContact.phoneNumber"
+            name="phoneNumber"
+            #phoneNumber="ngModel"
+            required
+            pattern="^\d{10}$|^\d{3}-\d{3}-\d{4}$">
+
+            <div *ngIf="phoneNumber.invalid && phoneNumber.touched">
+              <div class="text-red-500 text-sm mt-1" *ngIf="phoneNumber.errors?.['required']">
+                Phone Number is required.
+              </div>
+              <div class="text-red-500 text-sm mt-1" *ngIf="phoneNumber.errors?.['pattern']">
+                Please enter a valid phone number (e.g., 0712345679 or 959-671-5360).
+              </div>
+            </div>
+
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600" title="Save" aria-label="Save Changes">
+            <i class="fa fa-save"></i>
+          </button>
+          <button type="button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 " (click)="closeModal()" title="Close" aria-label="Close">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </form>
+
+
+      <div *ngIf="modalAction === 'VIEW'">
+        <p class="mb-2"><strong>First Name:</strong> {{ contact.firstName }}</p>
+        <p class="mb-2"><strong>Last Name:</strong> {{ contact.lastName }}</p>
+        <p class="mb-2"><strong>Email:</strong> {{ contact.email }}</p>
+        <p class="mb-2"><strong>Phone Number:</strong> {{ contact.phoneNumber }}</p>
+        <div class="flex justify-end mt-4">
+          <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded mr-2" (click)="updateModalAction(ModalAction.EDIT)" title="Edit" aria-label="Edit Contact">
+            <i class="fa fa-pencil"></i>
+          </button>
+          <button type="button" class="bg-red-500 text-white px-4 py-2 rounded mr-2" (click)="deleteContact()" title="Delete" aria-label="Delete Contact">
+            <i class="fa fa-trash"></i>
+          </button>
+          <button type="button" class="bg-gray-300 text-gray-700 px-4 py-2 rounded" (click)="closeModal()" title="Close" aria-label="Close">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
