@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Contact } from 'src/app/models/contact';
 import { ModalAction } from 'src/app/models/modalAction';
 import { ContactServiceService } from 'src/app/services/contact-service.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -54,6 +55,11 @@ export class ContactListComponent implements OnInit {
     } else {
       this.contactService.updateContact(contact);
     }
+    Swal.fire({
+      text: 'Contact Added Successfully',
+      icon: 'success',
+      confirmButtonColor: "#3B82F6"
+    });
     this.loadContacts();
     this.showEditModal = false;
   }
@@ -165,8 +171,8 @@ export class ContactListComponent implements OnInit {
 
   sortContacts() {
     this.contacts.sort((a, b) => {
-      const nameA = (a.firstName + ' ' + a.lastName).toUpperCase();
-      const nameB = (b.firstName + ' ' + b.lastName).toUpperCase();
+      const nameA = (a.firstName).toUpperCase();
+      const nameB = (b.firstName).toUpperCase();
       if (this.sortOrder === 'asc') {
         return nameA.localeCompare(nameB);
       } else {
