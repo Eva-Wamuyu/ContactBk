@@ -8,9 +8,21 @@ import { Contacts } from '../dummy/contact';
 })
 export class ContactServiceService {
 
-  constructor() { }
 
   contacts = Contacts;
+
+  constructor() {
+   this.loadContactsFromLocalStorage();
+  }
+
+  private loadContactsFromLocalStorage(): void {
+    const storedContacts = localStorage.getItem('contacts')
+    this.contacts = storedContacts ? JSON.parse(storedContacts) : this.getContacts();
+  }
+
+  private saveToLocalStorage(): void {
+    localStorage.setItem('contacts', JSON.stringify(this.contacts));
+  }
 
   getContacts(): Contact[] {
     return this.contacts.sort((a, b) => a.firstName.localeCompare(b.firstName));
@@ -28,11 +40,13 @@ export class ContactServiceService {
     const index = this.contacts.findIndex(contact => contact.id === updatedContact.id);
     if (index !== -1) {
       this.contacts[index] = updatedContact;
+      this.saveToLocalStorage();
     }
   }
 
   deleteContact(id: number): void {
     this.contacts = this.contacts.filter(contact => contact.id !== id);
+    this.saveToLocalStorage();
   }
 
   searchContacts(query: string): Contact[] {
@@ -48,6 +62,7 @@ export class ContactServiceService {
     const newId = this.contacts.reduce((maxId, c) => Math.max(c.id, maxId), 0) + 1;
     contact.id = newId;
     this.contacts.push(contact);
+    this.saveToLocalStorage();
   }
 
 }

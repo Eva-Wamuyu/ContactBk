@@ -52,14 +52,20 @@ export class ContactListComponent implements OnInit {
   saveContact(contact: Contact): void {
     if (contact.id === 0) {
       this.contactService.addContact(contact);
+      Swal.fire({
+        text: 'Contact Added Successfully',
+        icon: 'success',
+        confirmButtonColor: "#3B82F6"
+      });
     } else {
       this.contactService.updateContact(contact);
+      Swal.fire({
+        text: 'Contact Updated Successfully',
+        icon: 'success',
+        confirmButtonColor: "#3B82F6"
+      });
     }
-    Swal.fire({
-      text: 'Contact Added Successfully',
-      icon: 'success',
-      confirmButtonColor: "#3B82F6"
-    });
+
     this.loadContacts();
     this.showEditModal = false;
   }
